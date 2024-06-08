@@ -1,0 +1,9 @@
+Question,Type,Lookup,Function,Can be duplicated,Stand,Chapitre,Subchapitre,Paragraphe
+Etat des vitres,3 choice Yes/No/Partial,No,No,No,Zone d'accès au self,Les locaux,,
+Propreté des vitres,3 choice Yes/No/Partial,No,No,No,Zone d'accès au self,Les locaux,,
+Etat des murs,3 choice Yes/No/Partial,No,No,No,Zone d'accès au self,Les locaux,,
+Propreté des murs,3 choice Yes/No/Partial,No,No,No,Zone d'accès au self,Les locaux,,
+Etat des sols,3 choice Yes/No/Partial,No,No,No,Zone d'accès au self,Les locaux,,
+Propreté des sols,3 choice Yes/No/Partial,No,No,No,Zone d'accès au self,Les locaux,,
+Etat des plafonds,3 choice Yes/No/Partial,No,No,No,Zone d'accès au self,Les locaux,,
+Propreté des plafonds,3 choice Yes/No/Partial,No,No,No,Zone d'accès au self,Les locaux,,

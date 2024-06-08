@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Audit Structure Builder</title>
+    <script>
+        function showRelevantFields() {
+            const option = document.querySelector('input[name="option"]:checked').value;
+            document.getElementById('stand-selection').style.display = 'block';
+            document.getElementById('chapter-selection').style.display = option === '2' || option === '3' || option === '4' ? 'block' : 'none';
+            document.getElementById('subchapter-selection').style.display = option === '3' || option === '4' ? 'block' : 'none';
+            document.getElementById('paragraph-selection').style.display = option === '4' ? 'block' : 'none';
+            document.getElementById('question-selection').style.display = option === '4' ? 'block' : 'none';
+        }
+
+        async function fetchOptions(url, selectId) {
+            const response = await fetch(url);
+            const options = await response.json();
+            const select = document.getElementById(selectId);
+            select.innerHTML = '';
+            options.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option;
+                opt.innerHTML = option;
+                select.appendChild(opt);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Build Your Audit Structure</h1>
+    <form method="POST" action="{{ url_for('select') }}">
+        <label>Select an option:</label><br>
+        <input type="radio" id="option1" name="option" value="1" onclick="showRelevantFields()">
+        <label for="option1">Add ALL stands and all questions underneath</label><br>
+        <input type="radio" id="option2" name="option" value="2" onclick="showRelevantFields()">
+        <label for="option2">Add all chapters within a specific stand</label><br>
+        <input type="radio" id="option3" name="option" value="3" onclick="showRelevantFields()">
+        <label for="option3">Multi-select chapters within a specific stand</label><br>
+        <input type="radio" id="option4" name="option" value="4" onclick="showRelevantFields()">
+        <label for="option4">Multi-select questions within a specific chapter</label><br>
+
+        <div id="stand-selection" style="display:none;">
+            <label for="stand">Select Stand:</label>
+            <select name="stand" id="stand" onchange="fetchOptions('/get_chapters/' + this.value, 'chapters')">
+                {% for stand in stands %}
+                <option value="{{ stand }}">{{ stand }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div id="chapter-selection" style="display:none;">
+            <label for="chapters">Select Chapters:</label>
+            <select name="chapters" id="chapters" multiple onchange="fetchOptions('/get_subchapters/' + this.value, 'subchapters')">
+                <!-- Chapter options will be populated based on the selected stand using JavaScript -->
+            </select>
+        </div>
+
+        <div id="subchapter-selection" style="display:none;">
+            <label for="subchapters">Select Subchapters:</label>
+            <select name="subchapters" id="subchapters" multiple onchange="fetchOptions('/get_paragraphs/' + this.value, 'paragraphs')">
+                <!-- Subchapter options will be populated based on the selected chapter using JavaScript -->
+            </select>
+        </div>
+
+        <div id="paragraph-selection" style="display:none;">
+            <label for="paragraphs">Select Paragraphs:</label>
+            <select name="paragraphs" id="paragraphs" multiple onchange="fetchOptions('/get_questions/' + this.value, 'questions')">
+                <!-- Paragraph options will be populated based on the selected subchapter using JavaScript -->
+            </select>
+        </div>
+
+        <div id="question-selection" style="display:none;">
+            <label for="questions">Select Questions:</label>
+            <select name="questions" id="questions" multiple>
+                <!-- Question options will be populated based on the selected paragraph using JavaScript -->
+            </select>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.querySelectorAll('input[name="option"]').forEach((radio) => {
+            radio.addEventListener('change', showRelevantFields);
+        });
+    </script>
+</body>
+</html>
